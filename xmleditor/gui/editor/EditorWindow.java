@@ -131,8 +131,8 @@ public class EditorWindow extends JFrame {
 			fileMenu.add("New"); 			// TODO implement "File - New"
 			fileMenu.add("Open ..."); 		// TODO implement "File - Open"
 			fileMenu.addSeparator();
-			fileMenu.add("Save"); 			// TODO implement "File - Save"
-			fileMenu.add("Save As ..."); 	// TODO implement "File - Save As"
+			fileMenu.add(getSaveAction());
+			fileMenu.add(getSaveAsAction());
 			fileMenu.addSeparator();
 			fileMenu.add("Close"); 			// TODO implement "File - Close"
 			fileMenu.add(getQuitAction());			
@@ -181,7 +181,7 @@ public class EditorWindow extends JFrame {
 		if (xmlTree == null) {
 			DefaultMutableTreeNode top = new DefaultMutableTreeNode("XML Document");
 			
-			top.add(createDemoNodes());
+			top.add(createDummyNodes());
 			
 			xmlTree = new JTree(top);
 			

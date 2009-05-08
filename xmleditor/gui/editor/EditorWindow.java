@@ -151,6 +151,11 @@ public class EditorWindow extends JFrame {
 		return editMenu;
 	}
 	
+	/**
+	 * Generates a new <code>SaveAction</code> if necessary.
+	 * 
+	 * @return {@link #saveAction} instance
+	 */
 	public Action getSaveAction() {
 		if (saveAction == null) {
 			saveAction = new SaveAction(this);
@@ -158,6 +163,10 @@ public class EditorWindow extends JFrame {
 		return saveAction;
 	}
 	
+	/**
+	 * Generates a new <code>SaveAsAction</code> if necessary.
+	 * @return {@link #saveAsAction} instance
+	 */
 	public Action getSaveAsAction() {
 		if (saveAsAction == null) {
 			saveAsAction = new SaveAsAction(this);
@@ -168,7 +177,7 @@ public class EditorWindow extends JFrame {
 	/**
 	 * Generates the "Quit" <code>Action</code> if necessary.
 	 * 
-	 * @return {@link quitAction} instance.
+	 * @return {@link #quitAction} instance.
 	 */
 	public Action getQuitAction() {
 		if (quitAction == null) {

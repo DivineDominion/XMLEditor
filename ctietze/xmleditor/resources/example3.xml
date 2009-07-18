@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+	A mult-line 
+	comment
+ -->
+<catalog>
+	<book>
+		<author>Ray Bradbury</author>
+		<title>Fahrenheit 451</title>
+	</book>
+	<cd>
+		<interpret>Blind Guardian</interpret>
+		<!-- Allow comments! -->
+		<title>Nightfall in Middle Earth</title>
+		<comment><![CDATA[
+/* code I may have thought of when listening to the albun */
+function matchwo(a,b)
+{
+if (a < b && a < 0) then
+  {
+  return 1;
+  }
+else
+  {
+  return 0;
+  }
+}
+		]]></comment>
+	</cd>
+	<!-- maybe this should be lost during parsing? -->
+	<!-- todo: read (connect comment to next node) -->
+	<book author="Aldous Huxley" title="Brave New World" />
+	<book><author>George Orwell</author><title>1984</title><comment><![CDATA[have to watch the movie]]></comment></book>
+	<book author="Orson Wells"><title>The Time Machine</title><comment>still not read</comment></book>
+</catalog>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<catalog>
+	<book author="aAldous Huxley" title="Brave New World" />
+	<book>
+		<author>Ray Bradbury</author>
+		<title>Fahrenheit 451</title>
+	</book>
+	<book author="bAldous Huxley" title="Brave New World" />
+	<book><author>George Orwell</author><title>1984</title><comment><![CDATA[have to watch the movie]]></comment></book>
+</catalog>

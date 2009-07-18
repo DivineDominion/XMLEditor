@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- remove comment or so -->
+<catalog>
+	<cd>
+		<interpret>Blind Guardian</interpret>
+		<title>Nightfall in Middle Earth</title>
+		<comment>some text</comment>
+	</cd>
+	<book author="Aldous Huxley" title="Brave New World" />
+	<book><author>George Orwell</author><title>1984</title></book>
+</catalog>

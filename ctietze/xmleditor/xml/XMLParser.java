@@ -4,11 +4,15 @@
 package ctietze.xmleditor.xml;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,12 +37,25 @@ public class XMLParser {
 	 * 
 	 * @param url	File URL to parse XML from.
 	 * @return		Document's root node 
+	 * @throws MalformedURLException 
 	 */
-	public static XMLNode parseXmlFromFile(URL url) {		
+	public static XMLNode parseXmlFromUrl(URL url) {		
 		String content = "";
 		
 		try {
-			content = getStringFromFile(url).toString();
+			content = getStringFromUrl(url).toString();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return parseXmlFromString(content);
+	}
+	
+	public static XMLNode parseXmlFromFile(File file) {
+		String content = "";
+		
+		try {
+			content = getStringFromFile(file).toString();
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(-1);
@@ -69,7 +86,7 @@ public class XMLParser {
 	 * @return		Whole content of the file
 	 * @throws IOException
 	 */
-	private static StringBuffer getStringFromFile(URL url) throws IOException {
+	private static StringBuffer getStringFromUrl(URL url) throws IOException {
 		if (url == null) {
 			throw new IllegalArgumentException("url is null");
 		}
@@ -91,7 +108,36 @@ public class XMLParser {
 		
 		return fileString;
 	}
-	
+
+	private static StringBuffer getStringFromFile(File file) throws FileNotFoundException {
+		if (file == null) {
+			throw new IllegalArgumentException("File should not be null.");
+		}
+		if (!file.exists()) {
+			throw new FileNotFoundException ("File does not exist: " + file);
+		}
+		if (!file.isFile()) {
+			throw new IllegalArgumentException("Should not be a directory: " + file);
+		}
+		if (!file.canRead()) {
+			throw new IllegalArgumentException("File cannot be read: " + file);
+		}
+
+		StringBuffer buffer = new StringBuffer();
+		Scanner scanner = new Scanner(file);
+
+		try {
+			while (scanner.hasNextLine()) {
+				buffer.append(scanner.nextLine());
+			}
+		}
+		finally {
+			scanner.close();
+		}
+		
+		return buffer;
+	}
+
 	private static String removeComments(String content) {
 		Matcher comments = Pattern.compile("<!--.*?-->\\s*?", Pattern.DOTALL).matcher(content);
 		return comments.replaceAll("");
@@ -107,9 +153,7 @@ public class XMLParser {
 		return header.replaceFirst("");
 	}
 	
-	private static String removeWhitespace(String content) {
-		// FIXME Remove whitespace outside of text content & CDATA only!
-		// (?<=(\\]\\]>|</[\\w\\s]+?>|<[\\w\\s]+?/>)) 
+	private static String removeWhitespace(String content) { 
 		Matcher whitespace = Pattern.compile(REGEX_WHITESPACE, Pattern.DOTALL).matcher(content);
 		return whitespace.replaceAll("$1");
 	}

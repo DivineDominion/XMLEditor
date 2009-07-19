@@ -8,7 +8,7 @@ package ctietze.xmleditor.xml;
  * which may not have child nodes.
  * 
  * @author Christian Tietze
- * TODO! get/setComment shouldn't be available here -- abstract a 3rd class from node + attrib?
+ * TODO get/setComment shouldn't be available here -- abstract a 3rd class from node + attrib or just ignore it on output?
  */
 public class XMLAttribute extends XMLNode {
 	/**
@@ -65,7 +65,18 @@ public class XMLAttribute extends XMLNode {
 		return getName() + "=\"" + getValue() + "\"";
 	}
 	
+	@Override
 	public String generateXMLStructure(int depth) {
 		return generateXMLStructure();
+	}
+	
+	@Override
+	public boolean canChildNodesBeAdded() {
+		return false;
+	}
+	
+	@Override
+	public boolean canAttributesBeAdded() {
+		return false;
 	}
 }

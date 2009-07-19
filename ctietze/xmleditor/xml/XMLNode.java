@@ -30,7 +30,6 @@ public class XMLNode extends DefaultMutableTreeNode {
 	protected static final Pattern REGEX_VALID_NAME = Pattern.compile(
 			"^[a-zA-Z]+[:]?[a-zA-Z0-9_-]*[a-zA-Z0-9]*$");
 	
-	
 	/**
 	 * Root level node, i.e. has no parent from the start.
 	 * 
@@ -132,7 +131,6 @@ public class XMLNode extends DefaultMutableTreeNode {
 	 * @return Value, ready to be saved in an XML document
 	 */
 	private String exportValue() {
-		System.out.println(cdataNeeded() + "    " + value );
 		if (cdataNeeded()) {
 			return "<![CDATA[" + getValue() + "]]>";
 		}
@@ -157,7 +155,7 @@ public class XMLNode extends DefaultMutableTreeNode {
 	 * @return <code>true</code>, if {@link value} is not <code>null</code>
 	 */
 	public boolean hasValue() {
-		return value != null;
+		return value != null && value.length() > 0;
 	}
 	
 	/**
@@ -247,6 +245,10 @@ public class XMLNode extends DefaultMutableTreeNode {
 		return !getAllowsChildren() || this.getChildNodeCount() == 0;
 	}
 	
+	public boolean canAttributesBeAdded() {
+		return true;
+	}
+	
 	public boolean canChildNodesBeAdded() {
 		return !hasValue();
 	}
@@ -310,7 +312,7 @@ public class XMLNode extends DefaultMutableTreeNode {
 	 * @throws 	<code>RuntimeException</code> if newChild is no XMLAttribute and 
 	 * 			this node is not empty.
 	 */
-	public void add(XMLNode newChild) {
+	/*public void add(XMLNode newChild) {
 		
 		if (newChild instanceof XMLAttribute
 				|| canChildNodesBeAdded()) {
@@ -322,7 +324,7 @@ public class XMLNode extends DefaultMutableTreeNode {
 			throw new RuntimeException("newChild is not an Attribute and can not " +
 					"be added to a non-empty node " + this.toString());
 		}
-	}
+	}*/
 	
 	/**
 	 * 

@@ -4,8 +4,12 @@
 
 package ctietze.xmleditor.actions;
 
+import java.awt.event.FocusListener;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.event.TreeModelListener;
+import javax.swing.event.TreeSelectionListener;
 
 import ctietze.xmleditor.gui.editor.EditorWindow;
 

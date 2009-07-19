@@ -11,6 +11,7 @@ import ctietze.xmleditor.gui.editor.EditorWindow;
 import ctietze.xmleditor.xml.XMLAttribute;
 import ctietze.xmleditor.xml.XMLNode;
 import ctietze.xmleditor.xml.XMLTree;
+import ctietze.xmleditor.xml.XMLDocument;
 
 /**
  * Creates a new blank XML Document while asking the user to save changes to his
@@ -39,9 +40,14 @@ public class NewTreeAction extends AbstractUnsavedChangesAction {
 	 */
 	@Override
 	protected void doPerformAction() {
-		editorWindow.getXmlTree().setModel(XMLTree.createEmptyTreeModel());
+		XMLNode rootNode = XMLTree.createEmptyRootNode();
 		
-		editorWindow.getXmlTree().setEnabled(true);
+		DefaultTreeModel treeModel = (DefaultTreeModel) editorWindow.getXmlTree().getModel();
+		treeModel.setRoot(rootNode);
+		
+		editorWindow.setXmlDocument(new XMLDocument(rootNode));
+		
+		//editorWindow.getXmlTree().setEnabled(true);
 		editorWindow.getXmlTree().requestFocusInWindow();
 	}
 }

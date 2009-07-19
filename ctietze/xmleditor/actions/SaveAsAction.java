@@ -1,17 +1,24 @@
 package ctietze.xmleditor.actions;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.io.File;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 
 import ctietze.xmleditor.Resources;
 import ctietze.xmleditor.gui.dialogs.StackTraceErrorDialog;
 import ctietze.xmleditor.gui.editor.EditorWindow;
-import ctietze.xmleditor.xml.XmlDocument;
+import ctietze.xmleditor.xml.XMLNode;
+import ctietze.xmleditor.xml.XMLDocument;
 
 
 /**
@@ -27,18 +34,14 @@ import ctietze.xmleditor.xml.XmlDocument;
  * @author Christian Tietze
  * @version 1.0 2007-02-27
  */
-public class SaveAsAction extends AbstractEditorAction {
-
-	/** <code>true</code> if user clicks on "cancel" */
-	private boolean savingCancelled = false;
+public class SaveAsAction extends AbstractEditorAction implements TreeModelListener {
 
 	private static final String ACTION_NAME = Resources.getString("action.save_as.name");
 	private static final String ACTION_TOOLTIP = Resources.getString("action.save_as.tooltip");
 
-
-	private static final String ERROR_SAVE_DOCUMENT_CHANGES_TITLE = 
+	protected static final String ERROR_SAVE_DOCUMENT_CHANGES_TITLE = 
 		Resources.getString("error.save_document_changes.title");
-	private static final String ERROR_SAVE_DOCUMENT_CHANGES_TEXT = 
+	protected static final String ERROR_SAVE_DOCUMENT_CHANGES_TEXT = 
 		Resources.getString("error.save_document_changes.text");
 	
 	/**
@@ -57,17 +60,26 @@ public class SaveAsAction extends AbstractEditorAction {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		XmlDocument document = editorWindow.getOpenXml();
+		XMLDocument document = null;
 		
-		// TODO suggest old name?
-		savingCancelled = false;
-		JFileChooser fileChooser = new JFileChooser();
+		JFileChooser fileChooser = XMLDocument.getXmlFileChooser();
 		int result = fileChooser.showSaveDialog(editorWindow);
 
-		switch (result) {
-		case JFileChooser.APPROVE_OPTION:
+		if (result == JFileChooser.APPROVE_OPTION) {
+			if (editorWindow.hasOpenedDocument()) {
+				 document = editorWindow.getXmlDocument();
+			} else {
+				document = new XMLDocument((XMLNode) editorWindow.getXmlTree().getModel().getRoot());
+			}
+			
 			try {
-				document.saveAs(fileChooser.getSelectedFile());
+				// Add .xml if necessary
+				File file = fileChooser.getSelectedFile();
+				if (!file.getName().toLowerCase().endsWith(".xml")) {
+					file = new File(file.getAbsolutePath() + ".xml");
+				}
+				
+				document.saveAs(file);
 			} catch (Exception ex) {
 				// TODO refactor: error message in external class
 				JOptionPane.showMessageDialog(editorWindow, ERROR_SAVE_DOCUMENT_CHANGES_TEXT, 
@@ -75,13 +87,38 @@ public class SaveAsAction extends AbstractEditorAction {
 
 				StackTraceErrorDialog.makeNew(editorWindow, ex);
 			}
-			break;
-		case JFileChooser.CANCEL_OPTION:
-			savingCancelled = true;
+			
+			editorWindow.setXmlDocument(document);
 		}
 	}
-
-	public boolean isSavingCancelled() {
-		return savingCancelled;
+	
+	/**
+	 * Will be called when lots of nodes are modified.  In this case, I 
+	 * assume there'll be more open/close actions which are handled here.
+	 * In any other case (node with lots of childs deleted, I think) this
+	 * method will do no harm as well.
+	 * 
+	 * Override in {@link QuitAction}!
+	 */
+	@Override
+	public void treeStructureChanged(TreeModelEvent e) {
+		// This is the condition for affected root nodes.
+		// Root node affected?  Content change (close, new, open, ...)!
+		boolean enableMenus = (e.getTreePath() != null && e.getChildIndices() == null);
+		
+		setEnabled(enableMenus);
 	}
+	
+	@Override
+	public void treeNodesChanged(TreeModelEvent e) {
+	}
+
+	@Override
+	public void treeNodesInserted(TreeModelEvent e) {
+	}
+
+	@Override
+	public void treeNodesRemoved(TreeModelEvent e) {
+	}
+
 }

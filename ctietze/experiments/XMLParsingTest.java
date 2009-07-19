@@ -296,7 +296,6 @@ public class XMLParsingTest {
 	}
 	
 	private String removeWhitespace(String content) {
-		// FIXME Remove whitespace outside of text content & CDATA only!
 		// (?<=(\\]\\]>|</[\\w\\s]+?>|<[\\w\\s]+?/>)) 
 		Matcher whitespace = Pattern.compile(REGEX_WHITESPACE, Pattern.DOTALL).matcher(content);
 		return whitespace.replaceAll("$1");

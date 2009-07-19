@@ -1,10 +1,12 @@
 package ctietze.xmleditor.actions;
 
+import java.io.File;
 import java.net.URL;
 
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.MutableTreeNode;
 
 import ctietze.experiments.XMLParsingTest;
@@ -14,9 +16,11 @@ import ctietze.xmleditor.xml.XMLAttribute;
 import ctietze.xmleditor.xml.XMLNode;
 import ctietze.xmleditor.xml.XMLParser;
 import ctietze.xmleditor.xml.XMLTree;
+import ctietze.xmleditor.xml.XMLDocument;
 
 /**
- * 
+ * Create new tree contents with some XML content to show all features.
+ * <p>
  * Responds to CTRL+ALT+N
  * 
  * @author Christian Tietze
@@ -38,46 +42,25 @@ public class NewDummyTreeAction extends AbstractUnsavedChangesAction {
 	 */
 	@Override
 	protected void doPerformAction() {
-		//XMLNode[] nodes = { createDummyNodes() };
+		XMLNode rootNode = createDummyNodes();
 		
-		//editorWindow.getXmlTree().setModel(XMLTree.createTreeModelWith(nodes));
-		editorWindow.getXmlTree().setModel(XMLTree.createTreeModel(createDummyNodes()));
+		DefaultTreeModel treeModel = (DefaultTreeModel) editorWindow.getXmlTree().getModel();
+		treeModel.setRoot(rootNode);
 		
-		editorWindow.getXmlTree().setEnabled(true);
+		editorWindow.setXmlDocument(new XMLDocument(rootNode));
+		
+		//editorWindow.getXmlTree().setEnabled(true);
 		editorWindow.getXmlTree().requestFocusInWindow();
 	}
 	
 	/**
-	 * Generates a faux HTML document.
+	 * Generates tree contents from example XML file.
 	 * 
-	 * @return 	Node with "html" in it
+	 * @return 	Root node with some example content
 	 */
 	private XMLNode createDummyNodes() {
 		URL url = Resources.getFileURL("example3.xml");
-		XMLNode node = XMLParser.parseXmlFromFile(url);
+		XMLNode node = XMLParser.parseXmlFromUrl(url);
 		return node;
 	}
-	/*
-	private XMLNode createDummyNodes() {
-		XMLNode xml1 = new XMLNode("html");
-		XMLNode xml2a = new XMLNode("head");
-		XMLNode xml2b = new XMLNode("body");
-		XMLNode xml3a = new XMLNode("h1");
-		xml3a.setValue("News");
-		XMLNode xml3b = new XMLNode("p");
-		xml3b.setValue("lorem ipsum dolor sit amet ...");
-		XMLAttribute attrib3a = new XMLAttribute("class");
-		attrib3a.setValue("page_title");
-		
-		xml3a.add(attrib3a);
-		
-		xml2b.add(xml3a);
-		xml2b.add(xml3b);
-		
-		xml1.add(xml2a);
-		xml1.add(xml2b);
-		
-		return xml1;
-	}
-	*/
 }

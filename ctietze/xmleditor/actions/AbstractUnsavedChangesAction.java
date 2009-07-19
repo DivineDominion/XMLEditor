@@ -96,11 +96,11 @@ public abstract class AbstractUnsavedChangesAction extends SaveAction {
 	 * 
 	 * @return <code>true</code> if an open document has unsaved changes
 	 * @see EditorWindow#hasOpenedDocument()
-	 * @see ctietze.xmleditor.xml.XmlDocument#hasUnsavedChanges()
+	 * @see ctietze.xmleditor.xml.XMLDocument#hasUnsavedChanges()
 	 */
 	private boolean isDocumentOpenAndUnsaved() {
 		return (editorWindow.hasOpenedDocument() 
-				&& editorWindow.getOpenXml().hasUnsavedChanges());
+				&& editorWindow.getXmlDocument().hasUnsavedChanges());
 	}
 	
 	/**

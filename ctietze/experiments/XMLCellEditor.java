@@ -41,9 +41,7 @@ public class XMLCellEditor {
 	public static void main(final String args[]) {
 		JFrame frame = new JFrame("Editable Tree");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		final XMLTree tree = new XMLTree();
-		tree.setModel(XMLTree.createTreeModelWith(dummy()));
-		tree.setEditable(true);
+		JTree tree = new JTree();
 
 		DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) tree.getCellRenderer();
 		DefaultTreeCellEditor editor = new DefaultTreeCellEditor(tree, renderer);
@@ -97,8 +95,8 @@ public class XMLCellEditor {
 		tree.setCellEditor(editor);
 		
 		//tree.setCellEditor(realEditor);
-		//tree.addKeyListener(adapter);
-		//tree.getSelectionModel().addTreeSelectionListener(adapter);
+		tree.addKeyListener(adapter);
+		tree.getSelectionModel().addTreeSelectionListener(adapter);
 
 		JScrollPane scrollPane = new JScrollPane(tree);
 		frame.add(scrollPane, BorderLayout.CENTER);

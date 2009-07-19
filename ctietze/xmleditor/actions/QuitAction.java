@@ -2,6 +2,7 @@ package ctietze.xmleditor.actions;
 
 import javax.swing.Action;
 import javax.swing.KeyStroke;
+import javax.swing.event.TreeModelEvent;
 
 import ctietze.xmleditor.Resources;
 import ctietze.xmleditor.gui.editor.EditorWindow;
@@ -30,5 +31,14 @@ public class QuitAction extends AbstractUnsavedChangesAction {
 		editorWindow.setVisible(false);
 		editorWindow.dispose();
 		System.exit(0);
+	}
+	
+	/**
+	 * Must override {@link SaveAsAction#treeStructureChanged(TreeModelEvent)
+	 * because <code>AbstractUnsavedChangesAction</code> are depend on.
+	 */
+	@Override
+	public void treeStructureChanged(TreeModelEvent e) {
+		setEnabled(true);
 	}
 }

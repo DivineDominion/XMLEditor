@@ -2,6 +2,7 @@ package ctietze.xmleditor.actions;
 
 import javax.swing.Action;
 import javax.swing.KeyStroke;
+import javax.swing.tree.DefaultTreeModel;
 
 import ctietze.xmleditor.Resources;
 import ctietze.xmleditor.controller.NodeValueToRichEditContentSynchronizer;
@@ -28,15 +29,15 @@ public class CloseAction extends AbstractUnsavedChangesAction {
 	
 	/**
 	 * Clears the XMLTree and the RichEdit contents. Both are disabled,
-	 * the tree here and the RichEdit via 
-	 * {@link NodeValueToRichEditContentSynchronizer}. 
+	 * since listeners check for changes.
+	 * 
+	 * @see NodeValueToRichEditContentSynchronizer 
 	 */
 	@Override
 	protected void doPerformAction() {
-		editorWindow.getXmlTree().setModel(null); //XMLTree.createEmptyTreeModel()
-		
-		editorWindow.getXmlTree().setEnabled(false);
-		// rich edit is automatically reset due to adapters
+		DefaultTreeModel treeModel = (DefaultTreeModel) editorWindow.getXmlTree().getModel();;
+		treeModel.setRoot(null);
+		editorWindow.setXmlDocument(null);
 	}
 
 }
